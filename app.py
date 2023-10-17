@@ -6,8 +6,8 @@ import requests
 app = Flask(__name__)
 
 def add_watermark(pdf_bytes, watermark_text):
-    pdf = PyPDF2.PdfFileReader(io.BytesIO(pdf_bytes))
-    output = PyPDF2.PdfFileWriter()
+    pdf = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
+    output = PyPDF2.PdfWriter()
 
     for page_num in range(pdf.getNumPages()):
         page = pdf.getPage(page_num)
@@ -37,7 +37,7 @@ def watermark_pdf():
             return "Failed to fetch the PDF from the provided URL.", 400
 
         # Create a watermark (as a PyPDF2 object)
-        watermark = PyPDF2.PdfFileReader(io.BytesIO(watermark_text.encode()))
+        watermark = PyPDF2.PdfReader(io.BytesIO(watermark_text.encode()))
 
         # Add watermark to the PDF
         watermarked_pdf_bytes = add_watermark(response.content, watermark)
