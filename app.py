@@ -14,8 +14,8 @@ def validate_api_key(api_key):
     return api_keys.get(api_key) is not None
 
 def add_watermark(pdf_bytes, watermark_text):
-    pdf = PyPDF2.PdfFileReader(io.BytesIO(pdf_bytes))
-    output = PyPDF2.PdfFileWriter()
+    pdf = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
+    output = PyPDF2.PdfWriter()
 
     for page_num in range(pdf.getNumPages()):
         page = pdf.getPage(page_num)
