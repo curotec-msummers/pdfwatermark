@@ -33,6 +33,7 @@ def validate_api_key(api_key):
 
 def add_watermark(pdf_bytes, watermark_text):
     pdf = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
+    pdf.strict = False
     output = PyPDF2.PdfWriter()
 
     for page_num in range(pdf.getNumPages()):
@@ -65,7 +66,7 @@ class WatermarkPDFResource(Resource):
                 abort(400, message='Failed to fetch the PDF from the provided URL')
 
             # Create a watermark (as a PyPDF2 object)
-            watermark = PyPDF2.Reader(io.BytesIO(args['watermark_text'].encode()))
+            watermark = PyPDF2.PdfReader(io.BytesIO(args['watermark_text'].encode()))
             watermark.strict = False
 
             # Add watermark to the PDF
