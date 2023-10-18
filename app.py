@@ -1,12 +1,12 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
-from PyPDF2 import PdfFileWriter, PdfFileReader
+from PyPDF4 import PdfWriter, PdfReader
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 import io
-import PyPDF2
+import PyPDF4
 import requests
 
 
@@ -32,9 +32,9 @@ def validate_api_key(api_key):
     return api_keys.get(api_key) is not None
 
 def add_watermark(pdf_bytes, watermark_text):
-    pdf = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
+    pdf = PyPDF4.PdfReader(io.BytesIO(pdf_bytes))
     pdf.strict = False
-    output = PyPDF2.PdfWriter()
+    output = PyPDF4.PdfWriter()
 
     for page_num in range(pdf.getNumPages()):
         page = pdf.getPage(page_num)
@@ -65,8 +65,8 @@ class WatermarkPDFResource(Resource):
             if response.status_code != 200:
                 abort(400, message='Failed to fetch the PDF from the provided URL')
 
-            # Create a watermark (as a PyPDF2 object)
-            watermark = PyPDF2.PdfReader(io.BytesIO(args['watermark_text'].encode()))
+            # Create a watermark (as a PyPDF4 object)
+            watermark = PyPDF4.PdfReader(io.BytesIO(args['watermark_text'].encode()))
             watermark.strict = False
 
             # Add watermark to the PDF
