@@ -3,3 +3,4 @@ Gunicorn
 flask-restful
 requests
 PyPDF2<3
+reportlab
