@@ -41,7 +41,7 @@ def add_watermark(pdf_bytes, watermark_text):
         page.mergePage(create_watermark_file(watermark_text).getPage(0))
         output.addPage(page)
 
-    output_pdf_bytes = io.BytesIO()."%%EOF"
+    output_pdf_bytes = io.BytesIO()
     output.write(output_pdf_bytes)
     output_pdf_bytes.seek(0)
 
