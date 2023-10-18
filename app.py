@@ -65,7 +65,7 @@ class WatermarkPDFResource(Resource):
                 abort(400, message='Failed to fetch the PDF from the provided URL')
 
             # Create a watermark (as a PyPDF2 object)
-            watermark = PyPDF2.PdfReader(io.BytesIO(args['watermark_text'].encode()))
+            watermark = PyPDF2.PdfFileReader(io.BytesIO(args['watermark_text'].encode()), strict=FALSE)
 
             # Add watermark to the PDF
             watermarked_pdf_bytes = add_watermark(response.content, watermark)
