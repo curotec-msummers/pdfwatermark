@@ -45,7 +45,7 @@ def add_watermark(pdf_bytes, watermark_text):
 
     for page_num in range(pdf.getNumPages()):
         page = pdf.getPage(page_num)
-        page.mergePage(create_watermark_file(watermark_text))
+        page.mergePage(create_watermark_file(watermark_text).getPage(0))
         output.addPage(page)
 
     output_pdf_bytes = io.BytesIO()
