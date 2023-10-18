@@ -12,7 +12,7 @@ api_keys = {"f5762a00-1a5c-4ac2-aa97-2447492b05cf": "d0cb8e72-88c5-4c11-a074-443
 
 def create_watermark_file(watermark_text):
     # Create a PDF object
-    pdf = PyPDF2.PdfFileWriter()
+    pdf = PyPDF2.PdfWriter()
 
     # Create a new page
     page = PyPDF2.pdf.PageObject.createBlankPage()
@@ -73,7 +73,7 @@ class WatermarkPDFResource(Resource):
                 abort(400, message='Failed to fetch the PDF from the provided URL')
 
             # Create a watermark (as a PyPDF2 object)
-            watermark = PyPDF2.PdfFileReader(io.BytesIO(args['watermark_text'].encode()))
+            watermark = PyPDF2.PdfReader(io.BytesIO(args['watermark_text'].encode()))
 
             # Add watermark to the PDF
             watermarked_pdf_bytes = add_watermark(response.content, watermark)
