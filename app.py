@@ -1,8 +1,14 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
+from PyPDF2 import PdfFileWriter, PdfFileReader
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
 import io
 import PyPDF2
 import requests
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -10,31 +16,17 @@ api = Api(app)
 # Define a dictionary to store valid API keys (you should securely manage these keys)
 api_keys = {"f5762a00-1a5c-4ac2-aa97-2447492b05cf": "d0cb8e72-88c5-4c11-a074-443761fcb51a"}
 
-def create_watermark_file(watermark_text):
-    # Create a PDF object
-    pdf = PyPDF2.PdfWriter()
-
-    # Create a new page
-    page = PyPDF2.pdf.PageObject.createBlankPage()
-
-    # Create a PDF font
-    font = PyPDF2.pdf.ContentStream()
-    font.add(PyPDF2.pdf.Tj(watermark_text))
-
-    # Add the font to the page
-    page._pushObject(font)
-    page._compressContentStreams()
-
-    # Add the page to the PDF
-    pdf.addPage(page)
-
-    # Save the PDF to the in-memory buffer
-    pdf.write(output_pdf)
-
-    # Reset the buffer pointer to the beginning
-    output_pdf.seek(0)
-    
-    return output_pdf
+def create_watermark_file(watermark_text):# create text watermark with customizable transparency
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    c.translate(inch, inch) # move the current origin point of the canvas by the given horizontal and vertical distances
+    c.setFillColor(colors.red, alpha=0.3) # input the color value and use the alpha value to adjust the transparency of watermark
+    c.setFont("Helvetica", 50) # input the font and font size
+    c.rotate(45) # we can rotate the canvas by 45 degrees if needed
+    c.drawCentredString(400, 100, watermark_text)
+    c.save()
+    pdf = buffer.getvalue()
+    return pdf
 
 def validate_api_key(api_key):
     return api_keys.get(api_key) is not None
