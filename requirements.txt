@@ -2,4 +2,4 @@ Flask
 Gunicorn
 flask-restful
 requests
-
+uuid
