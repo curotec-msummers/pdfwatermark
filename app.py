@@ -37,7 +37,7 @@ class WatermarkPDFResource(Resource):
                 with open(full_filename, 'wb') as f:
                     f.write(response.content)
 
-            watermark_unwatermark_file(input_file=filename, wm_text=args['watermark_text'], action="watermark", mode="HDD", output_file=filename + "-watermarked.pdf")
+            watermark_unwatermark_file(input_file=full_filename, wm_text=args['watermark_text'], action="watermark", mode="HDD", output_file=filename + "-watermarked.pdf")
 
             # return {'watermarked_pdf': watermarked_pdf_bytes.decode('latin1')}
             return { 'status': 'success'}
