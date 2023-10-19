@@ -1,6 +1,5 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
-from pathlib import Path
 import requests
 import io
 
