@@ -69,7 +69,6 @@ def create_watermark(wm_text: str):
         return True, output_buffer
     return False, None
 
-
 def save_watermark(wm_buffer, output_file):
     """
     Saves the generated watermark template to disk
@@ -78,7 +77,6 @@ def save_watermark(wm_buffer, output_file):
         f.write(wm_buffer.getbuffer())
     f.close()
     return True
-
 
 def watermark_pdf(input_file: str, wm_text: str, pages: Tuple = None):
     """
@@ -107,11 +105,7 @@ def watermark_pdf(input_file: str, wm_text: str, pages: Tuple = None):
 def watermark_unwatermark_file(**kwargs):
     input_file = kwargs.get('input_file')
     wm_text = kwargs.get('wm_text')
-    # watermark   -> Watermark
-    # unwatermark -> Unwatermark
     action = kwargs.get('action')
-    # HDD -> Temporary files are saved on the Hard Disk Drive and then deleted
-    # RAM -> Temporary files are saved in memory and then deleted.
     mode = kwargs.get('mode')
     pages = kwargs.get('pages')
     temporary, output_file = get_output_file(
@@ -119,9 +113,7 @@ def watermark_unwatermark_file(**kwargs):
     if action == "watermark":
         result, pdf_reader, pdf_writer = watermark_pdf(
             input_file=input_file, wm_text=wm_text, pages=pages)
-    elif action == "unwatermark":
-        result, pdf_reader, pdf_writer = unwatermark_pdf(
-            input_file=input_file, wm_text=wm_text, pages=pages)
+    
     # Completed successfully
     if result:
         # Generate to memory
@@ -148,99 +140,8 @@ def watermark_unwatermark_file(**kwargs):
                 output_file = input_file
 
 
-def watermark_unwatermark_folder(**kwargs):
-    """
-    Watermarks all PDF Files within a specified path
-    Unwatermarks all PDF Files within a specified path
-    """
-    input_folder = kwargs.get('input_folder')
-    wm_text = kwargs.get('wm_text')
-    # Run in recursive mode
-    recursive = kwargs.get('recursive')
-    # watermark   -> Watermark
-    # unwatermark -> Unwatermark
-    action = kwargs.get('action')
-    # HDD -> Temporary files are saved on the Hard Disk Drive and then deleted
-    # RAM -> Temporary files are saved in memory and then deleted.
-    mode = kwargs.get('mode')
-    pages = kwargs.get('pages')
-    # Loop though the files within the input folder.
-    for foldername, dirs, filenames in os.walk(input_folder):
-        for filename in filenames:
-            # Check if pdf file
-            if not filename.endswith('.pdf'):
-                continue
-            # PDF File found
-            inp_pdf_file = os.path.join(foldername, filename)
-            print("Processing file:", inp_pdf_file)
-            watermark_unwatermark_file(input_file=inp_pdf_file, output_file=None,
-                                       wm_text=wm_text, action=action, mode=mode, pages=pages)
-        if not recursive:
-            break
-
-
-def is_valid_path(path):
-    """
-    Validates the path inputted and checks whether it is a file path or a folder path
-    """
-    if not path:
-        raise ValueError(f"Invalid Path")
-    if os.path.isfile(path):
-        return path
-    elif os.path.isdir(path):
-        return path
-    else:
-        raise ValueError(f"Invalid Path {path}")
-
-
-def parse_args():
-    """
-    Get user command line parameters
-    """
-    parser = argparse.ArgumentParser(description="Available Options")
-    parser.add_argument('-i', '--input_path', dest='input_path', type=is_valid_path,
-                        required=True, help="Enter the path of the file or the folder to process")
-    parser.add_argument('-a', '--action', dest='action', choices=[
-                        'watermark', 'unwatermark'], type=str, default='watermark',
-                        help="Choose whether to watermark or to unwatermark")
-    parser.add_argument('-m', '--mode', dest='mode', choices=['RAM', 'HDD'], type=str,
-                        default='RAM', help="Choose whether to process on the hard disk drive or in memory")
-    parser.add_argument('-w', '--watermark_text', dest='watermark_text',
-                        type=str, required=True, help="Enter a valid watermark text")
-    parser.add_argument('-p', '--pages', dest='pages', type=tuple,
-                        help="Enter the pages to consider e.g.: [2,4]")
-    path = parser.parse_known_args()[0].input_path
-    if os.path.isfile(path):
-        parser.add_argument('-o', '--output_file', dest='output_file',
-                            type=str, help="Enter a valid output file")
-    if os.path.isdir(path):
-        parser.add_argument('-r', '--recursive', dest='recursive', default=False, type=lambda x: (
-            str(x).lower() in ['true', '1', 'yes']), help="Process Recursively or Non-Recursively")
-    # To Porse The Command Line Arguments
-    args = vars(parser.parse_args())
-    # To Display The Command Line Arguments
-    print("## Command Arguments #################################################")
-    print("\n".join("{}:{}".format(i, j) for i, j in args.items()))
-    print("######################################################################")
-    return args
-
-
-if __name__ == '__main__':
-    # Parsing command line arguments entered by user
-    args = parse_args()
-    # If File Path
-    if os.path.isfile(args['input_path']):
-        # Extracting File Info
-        get_info(input_file=args['input_path'])
         # Encrypting or Decrypting a File
         watermark_unwatermark_file(
             input_file=args['input_path'], wm_text=args['watermark_text'], action=args[
                 'action'], mode=args['mode'], output_file=args['output_file'], pages=args['pages']
-        )
-    # If Folder Path
-    elif os.path.isdir(args['input_path']):
-        # Encrypting or Decrypting a Folder
-        watermark_unwatermark_folder(
-            input_folder=args['input_path'], wm_text=args['watermark_text'],
-            action=args['action'], mode=args['mode'], recursive=args['recursive'], pages=args['pages']
         )
