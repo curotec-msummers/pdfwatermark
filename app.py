@@ -29,7 +29,7 @@ class WatermarkPDFResource(Resource):
             response = requests.get(args['pdf_url'])
             if response.status_code != 200:
                 abort(400, message='Failed to fetch the PDF from the provided URL')
-            else
+            else:
                 filename = "/var/data/files/" + md5(str(uuid.uuid4())) + ".pdf"
                 response = requests.get(pdf_url)
                 filename.write_bytes(response.content)
