@@ -32,9 +32,9 @@ class WatermarkPDFResource(Resource):
                 abort(400, message='Failed to fetch the PDF from the provided URL')
             else:
                 filename = "/var/data/files/" + str(uuid.uuid4()) + ".pdf"
-                response = requests.get(pdf_url)
-                filename.write_bytes(response.content)
-
+                with open(filename, 'wb') as f:
+                    f.write(response.content)
+                    
             # return {'watermarked_pdf': watermarked_pdf_bytes.decode('latin1')}
             return { 'status': 'success'}
 
