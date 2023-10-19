@@ -3,7 +3,7 @@ from flask_restful import Api, Resource, reqparse, abort
 import requests
 import io
 import uuid
-import watermarker.py
+import watermarker
 
 app = Flask(__name__)
 api = Api(app)
