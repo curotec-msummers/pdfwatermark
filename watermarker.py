@@ -28,32 +28,6 @@ Y = 10
 ROTATION_ANGLE = 45
 
 
-def get_info(input_file: str):
-    """
-    Extracting the file info
-    """
-    # If PDF is encrypted the file metadata cannot be extracted
-    with open(input_file, 'rb') as pdf_file:
-        pdf_reader = PdfFileReader(pdf_file, strict=False)
-        output = {
-            "File": input_file, "Encrypted": ("True" if pdf_reader.isEncrypted else "False")
-        }
-        if not pdf_reader.isEncrypted:
-            info = pdf_reader.getDocumentInfo()
-            num_pages = pdf_reader.getNumPages()
-            output["Author"] = info.author
-            output["Creator"] = info.creator
-            output["Producer"] = info.producer
-            output["Subject"] = info.subject
-            output["Title"] = info.title
-            output["Number of pages"] = num_pages
-    # To Display collected metadata
-    print("## File Information ##################################################")
-    print("\n".join("{}:{}".format(i, j) for i, j in output.items()))
-    print("######################################################################")
-    return True, output
-
-
 def get_output_file(input_file: str, output_file: str):
     """
     Check whether a temporary output file is needed or not
@@ -129,34 +103,6 @@ def watermark_pdf(input_file: str, wm_text: str, pages: Tuple = None):
             return False, None, None
 
         return True, pdf_reader, pdf_writer
-
-
-def unwatermark_pdf(input_file: str, wm_text: str, pages: Tuple = None):
-    """
-    Removes watermark from the pdf file.
-    """
-    pdf_reader = PdfFileReader(open(input_file, 'rb'), strict=False)
-    pdf_writer = PdfFileWriter()
-    for page in range(pdf_reader.getNumPages()):
-        # If required for specific pages
-        if pages:
-            if str(page) not in pages:
-                continue
-        page = pdf_reader.getPage(page)
-        # Get the page content
-        content_object = page["/Contents"].getObject()
-        content = ContentStream(content_object, pdf_reader)
-        # Loop through all the elements page elements
-        for operands, operator in content.operations:
-            # Checks the TJ operator and replaces the corresponding string operand (Watermark text) with ''
-            if operator == b_("Tj"):
-                text = operands[0]
-                if isinstance(text, str) and text.startswith(wm_text):
-                    operands[0] = TextStringObject('')
-        page.__setitem__(NameObject('/Contents'), content)
-        pdf_writer.addPage(page)
-    return True, pdf_reader, pdf_writer
-
 
 def watermark_unwatermark_file(**kwargs):
     input_file = kwargs.get('input_file')
