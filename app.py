@@ -3,6 +3,7 @@ from flask_restful import Api, Resource, reqparse, abort
 import requests
 import io
 import uuid
+import watermarker.py
 
 app = Flask(__name__)
 api = Api(app)
@@ -31,10 +32,13 @@ class WatermarkPDFResource(Resource):
             if response.status_code != 200:
                 abort(400, message='Failed to fetch the PDF from the provided URL')
             else:
-                filename = "/var/data/files/" + str(uuid.uuid4()) + ".pdf"
-                with open(filename, 'wb') as f:
+                filename = "/var/data/files/" + str(uuid.uuid4())
+                full_filename = filename + ".pdf"
+                with open(full_filename, 'wb') as f:
                     f.write(response.content)
-                    
+
+            watermark_unwatermark_file(input_file=filename, wm_text=args['watermark_text'], action="watermark", mode="HDD", output_file=filename + "-watermarked.pdf")
+
             # return {'watermarked_pdf': watermarked_pdf_bytes.decode('latin1')}
             return { 'status': 'success'}
 
