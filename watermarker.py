@@ -138,10 +138,3 @@ def watermark_unwatermark_file(**kwargs):
                 if os.path.isfile(input_file):
                     os.replace(output_file, input_file)
                 output_file = input_file
-
-
-        # Encrypting or Decrypting a File
-        watermark_unwatermark_file(
-            input_file=args['input_path'], wm_text=args['watermark_text'], action=args[
-                'action'], mode=args['mode'], output_file=args['output_file'], pages=args['pages']
-        )
