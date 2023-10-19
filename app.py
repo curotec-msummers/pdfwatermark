@@ -1,14 +1,8 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
-from PyPDF4 import PdfWriter, PdfReader
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
-import io
-import PyPDF4
+from pathlib import Path
 import requests
-
+import io
 
 app = Flask(__name__)
 api = Api(app)
@@ -16,36 +10,8 @@ api = Api(app)
 # Define a dictionary to store valid API keys (you should securely manage these keys)
 api_keys = {"f5762a00-1a5c-4ac2-aa97-2447492b05cf": "d0cb8e72-88c5-4c11-a074-443761fcb51a"}
 
-def create_watermark_file(watermark_text):# create text watermark with customizable transparency
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
-    c.translate(inch, inch) # move the current origin point of the canvas by the given horizontal and vertical distances
-    c.setFillColor(colors.red, alpha=0.3) # input the color value and use the alpha value to adjust the transparency of watermark
-    c.setFont("Helvetica", 50) # input the font and font size
-    c.rotate(45) # we can rotate the canvas by 45 degrees if needed
-    c.drawCentredString(400, 100, watermark_text)
-    c.save()
-    pdf = buffer.getvalue()
-    return pdf
-
 def validate_api_key(api_key):
     return api_keys.get(api_key) is not None
-
-def add_watermark(pdf_bytes, watermark_text):
-    pdf = PyPDF4.PdfReader(io.BytesIO(pdf_bytes))
-    pdf.strict = False
-    output = PyPDF4.PdfWriter()
-
-    for page_num in range(pdf.getNumPages()):
-        page = pdf.getPage(page_num)
-        page.mergePage(create_watermark_file(watermark_text).getPage(0))
-        output.addPage(page)
-
-    output_pdf_bytes = io.BytesIO()
-    output.write(output_pdf_bytes)
-    output_pdf_bytes.seek(0)
-
-    return output_pdf_bytes.getvalue()
 
 class WatermarkPDFResource(Resource):
     def post(self):
@@ -64,16 +30,13 @@ class WatermarkPDFResource(Resource):
             response = requests.get(args['pdf_url'])
             if response.status_code != 200:
                 abort(400, message='Failed to fetch the PDF from the provided URL')
-
-            # Create a watermark (as a PyPDF4 object)
-            watermark = PyPDF4.PdfReader(io.BytesIO(args['watermark_text'].encode()))
-            watermark.strict = False
-
-            # Add watermark to the PDF
-            watermarked_pdf_bytes = add_watermark(response.content, watermark)
+            else
+                filename = "/var/data/files/" + md5(str(uuid.uuid4())) + ".pdf"
+                response = requests.get(pdf_url)
+                filename.write_bytes(response.content)
 
             # return {'watermarked_pdf': watermarked_pdf_bytes.decode('latin1')}
-            return {'watermarked_pdf_bytes': watermarked_pdf_bytes}
+            return { 'status': 'success'}
 
         except Exception as e:
             abort(500, message=str(e))
