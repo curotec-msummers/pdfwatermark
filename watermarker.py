@@ -13,7 +13,7 @@ from reportlab.lib.pagesizes import A4
 # The color of the watermark
 from reportlab.lib import colors
 
-PAGESIZE = letter
+PAGESIZE = 'A4'
 FONTNAME = 'Helvetica-Bold'
 FONTSIZE = 40
 COLOR = (247, 247, 247)
