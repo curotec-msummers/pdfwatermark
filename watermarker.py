@@ -8,7 +8,7 @@ from io import BytesIO
 from typing import Tuple
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
-from reportlab.lib import colors
+from reportlab.lib.colors import Color, black, blue, red 
 
 def get_output_file(input_file: str, output_file: str):
     """
@@ -34,7 +34,7 @@ def create_watermark(wm_text: str):
         c = canvas.Canvas(output_buffer, pagesize=letter)
         # Set the size and type of the font
         c.setFont("Helvetica-Oblique", 20)
-        c.setFillColor(red)
+        c.setFillColor(blue)
         #c.rotate(ROTATION_ANGLE)
         c.drawString(100, 100, wm_text)
         c.save()
