@@ -6,21 +6,9 @@ import os
 import argparse
 from io import BytesIO
 from typing import Tuple
-# Import the reportlab library
 from reportlab.pdfgen import canvas
-# The size of the page supposedly A4
-from reportlab.lib.pagesizes import A4
-# The color of the watermark
+from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib import colors
-
-PAGESIZE = 'A4'
-FONTNAME = 'Helvetica-Bold'
-FONTSIZE = 40
-COLOR = (247, 247, 247)
-X = 250
-Y = 250
-ROTATION_ANGLE = 45
-
 
 def get_output_file(input_file: str, output_file: str):
     """
@@ -43,13 +31,12 @@ def create_watermark(wm_text: str):
     if wm_text:
         # Generate the output to a memory buffer
         output_buffer = BytesIO()
-        # Default Page Size = A4
-        c = canvas.Canvas(output_buffer, pagesize=PAGESIZE)
+        c = canvas.Canvas(output_buffer, pagesize=letter)
         # Set the size and type of the font
-        c.setFont(FONTNAME, FONTSIZE)
-        c.setFillColor(COLOR)
-        c.rotate(ROTATION_ANGLE)
-        c.drawString(X, Y, wm_text)
+        c.setFont("Helvetica-Oblique", 20)
+        c.setFillColor(red)
+        #c.rotate(ROTATION_ANGLE)
+        c.drawString(100, 100, wm_text)
         c.save()
         return True, output_buffer
     return False, None
