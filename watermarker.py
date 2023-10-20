@@ -13,13 +13,13 @@ from reportlab.lib.pagesizes import A4
 # The color of the watermark
 from reportlab.lib import colors
 
-PAGESIZE = A4
-FONTNAME = 'Helvetica-Oblique'
-FONTSIZE = 23
+PAGESIZE = letter
+FONTNAME = 'Helvetica-Bold'
+FONTSIZE = 40
 COLOR = (247, 247, 247)
-X = 100
-Y = 10
-ROTATION_ANGLE = 90
+X = 250
+Y = 250
+ROTATION_ANGLE = 45
 
 
 def get_output_file(input_file: str, output_file: str):
