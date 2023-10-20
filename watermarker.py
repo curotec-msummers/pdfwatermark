@@ -14,17 +14,11 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 
 PAGESIZE = A4
-FONTNAME = 'Helvetica'
-FONTSIZE = 22
-# using colors module
-COLOR = colors.lightgrey
-# or simply RGB
-# COLOR = (190, 190, 190)
-#COLOR = colors.red
-# The position attributes of the watermark
+FONTNAME = 'Helvetica-bold'
+FONTSIZE = 23
+COLOR = (247, 247, 247)
 X = 100
 Y = 10
-# The rotation angle in order to display the watermark diagonally if needed
 ROTATION_ANGLE = 90
 
 
@@ -51,19 +45,10 @@ def create_watermark(wm_text: str):
         output_buffer = BytesIO()
         # Default Page Size = A4
         c = canvas.Canvas(output_buffer, pagesize=PAGESIZE)
-        # you can also add image instead of text
-        # c.drawImage("logo.png", X, Y, 160, 160)
         # Set the size and type of the font
         c.setFont(FONTNAME, FONTSIZE)
-        # Set the color
-        if isinstance(COLOR, tuple):
-            color = (c/255 for c in COLOR)
-            c.setFillColorRGB(*color)
-        else:
-            c.setFillColor(COLOR)
-        # Rotate according to the configured parameter
+        c.setFillColor(COLOR)
         c.rotate(ROTATION_ANGLE)
-        # Position according to the configured parameter
         c.drawString(X, Y, wm_text)
         c.save()
         return True, output_buffer
