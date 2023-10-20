@@ -14,7 +14,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 
 PAGESIZE = A4
-FONTNAME = 'Helvetica-bold'
+FONTNAME = 'Helvetica-Oblique'
 FONTSIZE = 23
 COLOR = (247, 247, 247)
 X = 100
