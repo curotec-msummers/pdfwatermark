@@ -14,18 +14,18 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 
 PAGESIZE = A4
-FONTNAME = 'Helvetica-Bold'
-FONTSIZE = 40
+FONTNAME = 'Helvetica'
+FONTSIZE = 22
 # using colors module
-# COLOR = colors.lightgrey
+COLOR = colors.lightgrey
 # or simply RGB
 # COLOR = (190, 190, 190)
-COLOR = colors.red
+#COLOR = colors.red
 # The position attributes of the watermark
-X = 250
+X = 100
 Y = 10
 # The rotation angle in order to display the watermark diagonally if needed
-ROTATION_ANGLE = 45
+ROTATION_ANGLE = 90
 
 
 def get_output_file(input_file: str, output_file: str):
