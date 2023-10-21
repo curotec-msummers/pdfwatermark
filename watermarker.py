@@ -36,7 +36,7 @@ def create_watermark(wm_text: str):
         c.setFillColor(lightgrey)
         c.setFillAlpha(0.4)
         c.rotate(45)
-        c.drawCenteredString(200, 600, wm_text)
+        c.drawCentredString(200, 600, wm_text)
         c.save()
         return True, output_buffer
     return False, None
