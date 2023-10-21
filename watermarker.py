@@ -35,6 +35,7 @@ def create_watermark(wm_text: str):
         # Set the size and type of the font
         c.setFont("Helvetica-Oblique", 18)
         c.setFillColor(lightgrey)
+        c.setFillAlpha(0.3)
         c.rotate(45)
         c.drawString(256, 100, wm_text)
         c.save()
