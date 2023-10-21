@@ -32,7 +32,6 @@ def create_watermark(wm_text: str):
         # Generate the output to a memory buffer
         output_buffer = BytesIO()
         c = canvas.Canvas(output_buffer, pagesize=letter)
-        # Set the size and type of the font
         c.setFont("Helvetica-Oblique", 18)
         c.setFillColor(lightgrey)
         c.setFillAlpha(0.4)
