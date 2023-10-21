@@ -66,8 +66,9 @@ def watermark_pdf(input_file: str, wm_text: str, pages: Tuple = None):
                     if str(page) not in pages:
                         continue
                 page = pdf_reader.getPage(page)
-                page.mergePage(wm_reader.getPage(0))
+                # page.mergePage(wm_reader.getPage(0))
                 pdf_writer.addPage(page)
+                page.mergePage(wm_reader.getPage(0))
         except Exception as e:
             print("Exception = ", e)
             return False, None, None
