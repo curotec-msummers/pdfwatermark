@@ -12,6 +12,14 @@ from reportlab.lib.colors import Color, black, blue, red, lightgrey
 from reportlab.lib.units import inch
 from reportlab.pdfbase.pdfmetrics import stringWidth
 
+def load_pdf_into_memory(pdf_path):
+    try:
+        with open(pdf_path, 'rb') as pdf_file:
+            pdf_data = pdf_file.read()
+        return pdf_data
+    except Exception as e:
+        return str(e)
+
 def get_output_file(input_file: str, output_file: str):
     """
     Check whether a temporary output file is needed or not
