@@ -30,7 +30,7 @@ class WatermarkPDFResource(Resource):
                 abort(401, message='Invalid API Key')
 
             # Fetch the PDF file from the provided URL
-            b64 = requests.get(args['pdf_url'])
+            b64 = args['pdf_url']
 
             # Decode the Base64 string, making sure that it contains only valid characters
             bytes = b64decode(b64, validate=True)
