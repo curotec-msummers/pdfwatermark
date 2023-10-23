@@ -40,7 +40,7 @@ class WatermarkPDFResource(Resource):
 
             watermark_unwatermark_file(input_file=full_filename, wm_text=args['watermark_text'], action="watermark", mode="HDD", output_file=filename + "-watermarked.pdf")
 
-            pdf_content = base64.b64encode(load_pdf_into_memory(filename + "-watermarked.pdf"))
+            pdf_content = base64.b64encode(load_pdf_into_memory(filename + "-watermarked.pdf")).decode('utf-8')
             # return {'watermarked_pdf': watermarked_pdf_bytes.decode('latin1')}
             return { 'pdf_bytes': pdf_content }
 
