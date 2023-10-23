@@ -10,6 +10,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib.colors import Color, black, blue, red, lightgrey
 from reportlab.lib.units import inch
+from reportlab.pdfbase.pdfmetrics import stringWidth
 
 def get_output_file(input_file: str, output_file: str):
     """
