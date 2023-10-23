@@ -39,8 +39,9 @@ class WatermarkPDFResource(Resource):
 
             watermark_unwatermark_file(input_file=full_filename, wm_text=args['watermark_text'], action="watermark", mode="HDD", output_file=filename + "-watermarked.pdf")
 
+            pdf_content = load_pdf_into_memory(filename + "-watermarked.pdf")
             # return {'watermarked_pdf': watermarked_pdf_bytes.decode('latin1')}
-            return { 'status': 'success'}
+            return { 'pdf_bytes': pdf_content }
 
         except Exception as e:
             abort(500, message=str(e))
