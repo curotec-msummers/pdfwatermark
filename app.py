@@ -3,7 +3,7 @@ from flask_restful import Api, Resource, reqparse, abort
 import requests
 import io
 import uuid
-from watermarker import watermark_unwatermark_file
+from watermarker import watermark_unwatermark_file, load_pdf_into_memory
 
 app = Flask(__name__)
 api = Api(app)
