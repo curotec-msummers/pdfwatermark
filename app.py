@@ -4,6 +4,7 @@ import requests
 import io
 import uuid
 import base64
+from base64 import b64decode
 from watermarker import watermark_unwatermark_file, load_pdf_into_memory
 
 app = Flask(__name__)
@@ -29,15 +30,20 @@ class WatermarkPDFResource(Resource):
                 abort(401, message='Invalid API Key')
 
             # Fetch the PDF file from the provided URL
-            response = requests.get(args['pdf_url'])
-            if response.status_code != 200:
-                abort(400, message='Failed to fetch the PDF from the provided URL')
-            else:
-                filename = "/var/data/files/" + str(uuid.uuid4())
-                full_filename = filename + ".pdf"
-                with open(full_filename, 'wb') as f:
-                    f.write(response.content)
+            b64 = requests.get(args['pdf_url'])
 
+            # Decode the Base64 string, making sure that it contains only valid characters
+            bytes = b64decode(b64, validate=True)
+            if bytes[0:4] != b'%PDF':
+                raise ValueError('Missing the PDF file signature')
+            
+            # Write the PDF contents to a local file
+            filename = "/var/data/files/" + str(uuid.uuid4())
+            full_filename = filename + ".pdf"
+            f = open("/var/data/files/" + str(uuid.uuid4()) + ".pdf", 'wb')
+            f.write(bytes)
+            f.close()
+            
             watermark_unwatermark_file(input_file=full_filename, wm_text=args['watermark_text'], action="watermark", mode="HDD", output_file=filename + "-watermarked.pdf")
 
             pdf_content = base64.b64encode(load_pdf_into_memory(filename + "-watermarked.pdf")).decode('utf-8')
