@@ -40,7 +40,7 @@ class WatermarkPDFResource(Resource):
             # Write the PDF contents to a local file
             filename = "/var/data/files/" + str(uuid.uuid4())
             full_filename = filename + ".pdf"
-            f = open("/var/data/files/" + str(uuid.uuid4()) + ".pdf", 'wb')
+            f = open("/var/data/files/" + full_filename, 'wb')
             f.write(bytes)
             f.close()
             
