@@ -9,6 +9,7 @@ from typing import Tuple
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib.colors import Color, black, blue, red, lightgrey
+from reportlab.lib.units import inch
 
 def get_output_file(input_file: str, output_file: str):
     """
@@ -32,11 +33,17 @@ def create_watermark(wm_text: str):
         # Generate the output to a memory buffer
         output_buffer = BytesIO()
         c = canvas.Canvas(output_buffer, pagesize=letter)
-        c.setFont("Helvetica-Oblique", 16)
+        c.translate(inch, inch)
+        c.setFont("Helvetica-Oblique", 15)
         c.setFillColor(lightgrey)
-        c.setFillAlpha(0.4)
+        c.setFillAlpha(0.5)
         c.rotate(45)
-        c.drawString(150, 150, wm_text)
+        widthPage = c._pagesize[0]
+        leftMargin = 70
+        widthText = stringWidth(wm_text, "Helvetica", 15)
+        x2 = (widthPage / 2) - (widthText / 2) - leftMargin
+        c.drawString(x2, -45, wm_text)
+        # c.drawString(150, 150, wm_text)
         c.save()
         return True, output_buffer
     return False, None
