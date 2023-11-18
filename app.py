@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
 import requests
 import io
+import os
 import uuid
 import base64
 from base64 import b64decode
@@ -47,7 +48,10 @@ class WatermarkPDFResource(Resource):
             watermark_unwatermark_file(input_file=full_filename, wm_text=args['watermark_text'], action="watermark", mode="HDD", output_file=filename + "-watermarked.pdf")
 
             pdf_content = base64.b64encode(load_pdf_into_memory(filename + "-watermarked.pdf")).decode('utf-8')
-            # return {'watermarked_pdf': watermarked_pdf_bytes.decode('latin1')}
+            # delete the files
+            os.unlink(full_filename)
+            os.unlink(filename + "-watermarked.pdf")
+
             return { 'pdf_bytes': pdf_content }
 
         except Exception as e:
