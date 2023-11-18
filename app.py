@@ -50,7 +50,7 @@ class WatermarkPDFResource(Resource):
             pdf_content = base64.b64encode(load_pdf_into_memory(filename + "-watermarked.pdf")).decode('utf-8')
             # delete the files
             os.unlink(full_filename)
-            # os.unlink(filename + "-watermarked.pdf")
+            os.unlink(filename + "-watermarked.pdf")
 
             return { 'pdf_bytes': pdf_content }
 
